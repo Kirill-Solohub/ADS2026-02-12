@@ -1,5 +1,6 @@
 package by.it.group551003.sologub.lesson07;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Scanner;
@@ -50,11 +51,58 @@ public class C_EditDist {
 
     String getDistanceEdinting(String one, String two) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
+        int[][] dp = new int[one.length() + 1][two.length() + 1];
+        for (int i = 0; i < two.length(); ++i) {
+            dp[0][i] = i;
+        }
+        for (int i = 0; i < one.length(); ++i) {
+            dp[i][0] = i;
+        }
 
+        for (int i = 1; i <= one.length(); ++i) {
+            for (int j = 1; j <= two.length(); ++j) {
+                dp[i][j] = Math.min(
+                        dp[i][j - 1] + 1,
+                        Math.min(
+                                dp[i - 1][j] + 1,
+                                dp[i - 1][j - 1] + (one.charAt(i - 1) != two.charAt(j - 1) ? 1 : 0)
+                        )
+                );
+            }
+        }
 
-        String result = "";
+        StringBuilder result = new StringBuilder();
+
+        int i = one.length();
+        int j = two.length();
+
+        while (i > 0 && j > 0) {
+            int cost = (one.charAt(i - 1) == two.charAt(j - 1)) ? 0 : 1;
+
+            if (dp[i][j] == dp[i - 1][j - 1] + cost) {
+                result.append(one.charAt(i - 1) == two.charAt(j - 1) ? "#," : "~" + one.charAt(i - 1) + ",");
+                i--; j--;
+            } else if (dp[i][j] == dp[i - 1][j] + 1) {
+                result.append("-").append(one.charAt(i - 1)).append(",");
+                i--;
+            } else {
+                result.append("+").append(two.charAt(j - 1)).append(",");
+                j--;
+            }
+        }
+
+        while (i > 0) {
+            result.append("-,");
+            i--;
+        }
+        while (j > 0) {
+            result.append("+,");
+            j--;
+        }
+
+        System.out.println(result);
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+        return result.toString();
     }
 
 

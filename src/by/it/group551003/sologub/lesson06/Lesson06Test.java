@@ -30,6 +30,7 @@ public class Lesson06Test {
     public void checkC() throws Exception {
         InputStream inputStream = C_LongNotUpSubSeq.class.getResourceAsStream("dataC.txt");
         C_LongNotUpSubSeq instance = new C_LongNotUpSubSeq();
+
         int result = instance.getNotUpSeqSize(inputStream);
         boolean ok = (result == 4);
         assertTrue("C failed", ok);

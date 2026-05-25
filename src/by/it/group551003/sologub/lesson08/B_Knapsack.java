@@ -1,5 +1,6 @@
 package by.it.group551003.sologub.lesson08;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Scanner;
@@ -37,8 +38,22 @@ public class B_Knapsack {
             gold[i]=scanner.nextInt();
         }
 
+        int[][] dp = new int[n + 1][w + 1];
 
-        int result = 0;
+        for (int i = 1; i <= n; ++i) {
+            for (int weight = 1; weight <= w; ++weight) {
+                dp[i][weight] = dp[i - 1][weight];
+
+                if (gold[i - 1] <= weight) {
+                    dp[i][weight] = Math.max(
+                            dp[i][weight],
+                            dp[i - 1][weight - gold[i - 1]] + gold[i - 1]
+                    );
+                }
+            }
+        }
+
+        int result = dp[n][w];
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }

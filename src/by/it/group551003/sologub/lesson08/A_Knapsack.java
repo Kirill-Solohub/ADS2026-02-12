@@ -1,7 +1,11 @@
 package by.it.group551003.sologub.lesson08;
 
+import by.it.group551003.sologub.lesson07.A_EditDist;
+
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /*
@@ -44,9 +48,17 @@ public class A_Knapsack {
         for (int i = 0; i < n; i++) {
             gold[i]=scanner.nextInt();
         }
+        int[] dp = new int[w + 1];
 
+        for (int weight = 1; weight <= w; ++weight) {
+            for (int i = 0; i < n; ++i) {
+                if (gold[i] <= weight) {
+                    dp[weight] = Math.max(dp[weight], gold[i] + dp[weight - gold[i]]);
+                }
+            }
+        }
 
-        int result = 0;
+        int result = dp[w];
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }

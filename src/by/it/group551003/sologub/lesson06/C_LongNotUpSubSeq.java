@@ -2,7 +2,9 @@ package by.it.group551003.sologub.lesson06;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Scanner;
+import java.util.Stack;
 
 /*
 Задача на программирование: наибольшая невозростающая подпоследовательность
@@ -44,23 +46,55 @@ public class C_LongNotUpSubSeq {
         System.out.print(result);
     }
 
+    public static int upperBound(int[] arr, int len, int value) {
+        int low = 0;
+        int high = len;
+        while (low < high) {
+            int mid = low + (high - low) / 2;
+            if (arr[mid] >= value) {
+                low = mid + 1;
+            } else {
+                high = mid;
+            }
+        }
+        return low;
+    }
+
     int getNotUpSeqSize(InputStream stream) throws FileNotFoundException {
-        //подготовка к чтению данных
         Scanner scanner = new Scanner(stream);
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        //общая длина последовательности
         int n = scanner.nextInt();
         int[] m = new int[n];
-        //читаем всю последовательность
         for (int i = 0; i < n; i++) {
             m[i] = scanner.nextInt();
         }
-        //тут реализуйте логику задачи методами динамического программирования (!!!)
-        int result = 0;
 
+        int[] dp = new int[n];
+        int[] pos = new int[n];
+        int[] prev = new int[n];
+        Arrays.fill(prev, -1);
 
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+        int length = 0;
+
+        for (int i = 0; i < n; ++i) {
+            int j = upperBound(dp, length, m[i]);
+            dp[j] = m[i];
+            pos[j] = i;
+            prev[i] = (j > 0) ? pos[j - 1] : -1;
+            if (j == length) {
+                length++;
+            }
+        }
+
+        int[] indices = new int[length];
+        int idx = pos[length - 1];
+        for (int k = length - 1; k >= 0; k--) {
+            indices[k] = idx;
+            idx = prev[idx];
+        }
+
+        for (int i : indices) System.out.print(i + 1 + " ");
+
+        return length;
     }
 
 }
